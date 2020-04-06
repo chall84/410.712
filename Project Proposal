@@ -1,0 +1,26 @@
+chall84 final project proposal
+
+Multianalysis VCF viewer
+
+Input = VCF file annotated by SnpEff, VCF file annotated by ANNOVAR
+(Can I have the user upload a VCF and then annotate it on the server? It would be ideal for user experience but if not I can just do the analysis on my own computer and copy the analyzed files to the server)
+
+Files are parsed and loaded into the database. Each file is essentially its own table in the schema. Also in the database is a "genes" table parsed from the GFF3 for the human genome. This table links in gene ontology terms for filtering. The "dbSNP" table has rows for each rs# and links in the clinical significance. To save space I'll just download a list of the pathogenic or likely pathogenic snps for the table and assign a value of "benign" to any variant that has an rs# that's not in the table.
+
+Schema:
+
+SnpEff variants 
+columns = variant id#(primary key), location, ref, alt, SnpEff consequence significance prediction, genecode(foreign key)
+
+ANNOVAR variants 
+columns = variant id#(primary key), location, ref, alt, rs#(foreign key), ANNOVAR consequence significance prediction, genecode(foreign key)
+
+genes
+columns = genecode(primary key), location, ontology
+
+dbSNP
+columns = rs#(primary key), location, clinical significance
+
+The output on the webpage will be a table with columns= variant location, ref, alt, rs# (or novel), gene, gene ontology, SnpEff consequence prediction, ANNOVAR consequence prediction, dbSNP clinical significance.
+
+The user will be able to filter the results table by the values within the columns, for example, a user might choose to view only those variants with a GO of DNA repair and a pathogenic predicted consequence from SnpEff or ANNOVAR. Or only those variants with an rs# labelled pathogenic.This allows the user to compare predictions to each other and to known consequences.
