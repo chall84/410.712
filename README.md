@@ -8,7 +8,9 @@ First run the analyses on YOUR_INPUT.vcf and download the appropriate ClinVar re
 SnpEff annotated VCF file
 
 Dowload and unzip SnpEff to install (available here: http://snpeff.sourceforge.net/download.html)
+
 Run SnpEff with this command : java -Xmx4g -jar snpEff.jar GRCh37.75 YOUR_INPUT.vcf > YOUR_OUT.ann.vcf
+
     Match the genome version to the reference version in YOUR_INPUT.vcf
     -Xmx4g sets the maximum heap size to 4g
     -jar runs the file snpEff.jar
