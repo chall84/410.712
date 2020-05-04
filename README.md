@@ -6,23 +6,26 @@ Multianalysis VCF Viewer allows the user to view SnpEff, ANNOVAR and ClinVar ann
 First run the analyses on YOUR_INPUT.vcf and download the appropriate ClinVar reference file. The reference genome version for your vcf will be listed in the ## comments at the top of the file. The example commands below use hg19 as the reference genome.
 
 SnpEff annotated VCF file
-    • Dowload and unzip SnpEff to install (available here: http://snpeff.sourceforge.net/download.html)
-    • Run SnpEff with this command : java -Xmx4g -jar snpEff.jar GRCh37.75 YOUR_INPUT.vcf > YOUR_OUT.ann.vcf
-        ◦ Match the genome version to the reference version in YOUR_INPUT.vcf
-        ◦ -Xmx4g sets the maximum heap size to 4g
-        ◦ -jar runs the file snpEff.jar
-        ◦ The manual is available here: http://snpeff.sourceforge.net/SnpEff_manual.html#run
+
+Dowload and unzip SnpEff to install (available here: http://snpeff.sourceforge.net/download.html)
+Run SnpEff with this command : java -Xmx4g -jar snpEff.jar GRCh37.75 YOUR_INPUT.vcf > YOUR_OUT.ann.vcf
+    Match the genome version to the reference version in YOUR_INPUT.vcf
+    -Xmx4g sets the maximum heap size to 4g
+    -jar runs the file snpEff.jar
+    The manual is available here: http://snpeff.sourceforge.net/SnpEff_manual.html#run
+    
 ANNOVAR annotated VCF file
-    • Dowload an install ANNOVAR (you must ask for a link to download here: http://download.openbioinformatics.org/annovar_download_form.php)
-    • Download the refGene and avsnp147 databases
-        ◦ Make sure to select the genome version that is the reference for the input VCF
-        ◦ annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
-        ◦ annotate_variation.pl -buildver hg19 -downdb -webfrom annovar avsnp147 humandb/ 
-            ▪ -buildver should be the reference genome used in YOUR_INPUT.vcf
-            ▪ These commands put these databases in the humandb folder within ANNOVAR
-    • Run ANNOVAR with this command: table_annovar.pl YOUR_INPUT.vcf humandb/ -buildver hg19 -out YOUR_OUT -remove -protocol refGene,avsnp147 -operation g,f -nastring . -vcfinput -polish
-        ◦ -buildver should be the reference genome used in YOUR_INPUT.vcf
-        ◦ -remove removes the temporary files
+
+Dowload an install ANNOVAR (you must ask for a link to download here: http://download.openbioinformatics.org/annovar_download_form.php)
+Download the refGene and avsnp147 databases
+    Make sure to select the genome version that is the reference for the input VCF
+    annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
+    annotate_variation.pl -buildver hg19 -downdb -webfrom annovar avsnp147 humandb/ 
+        -buildver should be the reference genome used in YOUR_INPUT.vcf
+        These commands put these databases in the humandb folder within ANNOVAR
+Run ANNOVAR with this command: table_annovar.pl YOUR_INPUT.vcf humandb/ -buildver hg19 -out YOUR_OUT -remove -protocol refGene,avsnp147 -operation g,f -nastring . -vcfinput -polish
+    -buildver should be the reference genome used in YOUR_INPUT.vcf
+    -remove removes the temporary files
         ◦ - protocol refGene,avsnp147 specifies the databases to be used
         ◦ - operation g,f specifes the database operations to gene and filter respectively
         ◦ -nastring . Sets the null value to a full stop
