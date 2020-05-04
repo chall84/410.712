@@ -15,7 +15,7 @@ conn = mysql.connector.connect(user="chall84", password="Diapers3", host="localh
 curs = conn.cursor()
 
 rowlist = []
-qry = ("SELECT se.loc as loc, se.gene as gene, se.gt as gt, clin.dn as dn, an.rs as rs, clin.sig as sig, clin.vartype as clinvartype, an.pred as anpred, an.vartype as anvartype, se.pred as sepred, se.vartype as sevartype FROM se JOIN an on se.loc = an.loc LEFT OUTER JOIN clin on se.loc=clin.loc WHERE se.pred = %s ")
+qry = ("SELECT se.loc as loc, se.gene as gene, se.gt as gt, clin.dn as dn, an.rs as rs, clin.sig as sig, clin.vartype as clinvartype, an.pred as anpred, an.vartype as anvartype, se.pred as sepred, se.vartype as sevartype FROM se JOIN an on se.loc = an.loc LEFT OUTER JOIN clin on se.loc=clin.loc LEFT OUTER JOIN clin clin1 on an.loc = clin1.loc WHERE se.pred = %s ")
 curs.execute(qry, ("" + term + "",))
 
 for (loc, gene, gt, dn, rs, sig, clinvartype, anpred, anvartype, sepred, sevartype) in curs:
