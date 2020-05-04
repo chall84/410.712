@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lan="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>VCF Consequence Prediction Viewer</title>
+    <link rel="stylesheet" type="text/css" href="fsheet.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="fsearch.js"></script>
+  </head>
+  <body id="main">
+
+    <h1>VCF Consequence Predictor Search</h1>
+    <h2>Search by:</h2>
+    <form name="choose" id="choose" action="" required>
+      <input type="radio" name="choice" id="choice" value="gene"/> Gene
+      <input type="radio" name="choice" id="choice" value="dn"/> Clinical Diagnosis
+      <input type="radio" name="choice" id="choice" value="rs"/> RS
+      <input type="radio" name="choice" id="choice" value="sig"/> Clinical Significance
+      <input type="radio" name="choice" id="choice" value="sepred"/> SnpEff Prediction
+      <input type="radio" name="choice" id="choice" value="anpred"/> ANNOVAR prediction
+    </form>
+    <form name="search" id="search" action="">
+      <input id="search_term" name="search_term" type="search" value="" autofocus="autofocus" placeholder="Enter a search term"/>
+      <input name="submit" type="submit" id="submit" value="submit">
+    </form>
+    <form name="rs_search" id="rs_search" action="">
+      <input id="search_term" name="search_term" type="search" value="" autofocus="autofocus" placeholder="Enter a search term"/>
+      <input name="rs_submit" type="submit" id="rs_submit" value="submit">
+    </form>
+    
+    <section id="results">
+      <p>
+	<span id="match_count">0</span> match(es) found.
+      </p>
+      <table style="width 80%">
+	<thead>
+	  <tr>
+	    <td>Location</td>
+	    <td>Gene</td>
+	    <td>Genotype</td>
+	    <td>Clinical Diagnosis</td>
+	    <td>RS</td>
+	    <td>Clinical Significance</td>
+	    <td>ClinVar Variant Type</td>
+	    <td>SnpEff Prediction</td>
+	    <td>SnpEff Variant Type</td>
+	    <td>ANNOVAR Prediction</td>
+	    <td>ANNOVAR Variant Type</td>
+	  </tr>
+	</thead>
+	<tbody>
+	  <! filled by javascript >
+	</tbody>
+    </section>
+  </body>
+</html>
+

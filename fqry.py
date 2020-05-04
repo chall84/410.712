@@ -4,53 +4,48 @@ import mysql.connector
 import fobjects
 import fparse
 
-def create_db(sefile, anfile, snpfile):
+def create_db(sefile, anfile, clinfile):
 
-    conn = mysql.connector.connect(user="chall84", password="Diapers3", host="localhost", database="chall84_f")
+    conn = mysql.connector.connect(user="chall84", password="Diapers3", host="localhost", database="chall84")
     curs = conn.cursor()
 
-    se = SEparse(sefile)
-    an = ANparse(anfile)
-    snp = snpparse(snpfile)
+    drop = ("DROP TABLE IF EXISTS se, an, clin")
+    curs.execute(drop, )
 
-    setable = ("CREATE TABLE se (id int not null primary key, loc varchar(100) not null, ref varchar(100) null, alt varchar(100) null, gene varchar(100) null, gt varchar(3) null, rs varchar(100) null, vartype varchar(250) null, pred varchar(100) null)")
+    se = fparse.SEparse(sefile)        
+    an = fparse.ANparse(anfile)
+    clin = fparse.CLINparse(clinfile)
+
+    setable = ("CREATE TABLE se (id int not null primary key, loc varchar(250) not null,  gene varchar(100) not null, gt varchar(3) not null, vartype varchar(250) null, pred varchar(100) null)")
     curs.execute(setable, )
-
+    
+    seinsert = ("INSERT INTO se (id, loc, gene, gt, vartype, pred) VALUES(%s, %s, %s, %s, %s, %s)")
     for i in se:
-        seinsert = ("INSERT INTO se VALUES(i.id, i.loc, i.ref, i.alt, i.gene, i.gt, i.rs, i.vartype, i.sepred)")
-        curs.execute(seinsert, )
+        i.check_loc(i.loc)
+        i.format_gt(i.gt)
+        i.format_sevartype(i.sevartype)
+        curs.execute(seinsert, (i.id, i.loc, i.gene, i.gt, i.sevartype, i.sepred,))
 
-    antable = ("CREATE TABLE an (id int not null primary key, loc varchar(100) not null, ref varchar(100) null, alt varchar(100) null, gene varchar(100) null, gt varchar(3) null, rs varchar(100) null, vartype varchar(250) null, pred varchar(100) null)")
+    antable = ("CREATE TABLE an (id int not null primary key, loc varchar(250) not null, gene varchar(100) null, gt varchar(3) not  null, rs varchar(100) null, vartype varchar(250) null, pred varchar(100) null)")
     curs.execute(antable, )
 
+    aninsert = ("INSERT INTO an (id, loc, gene, gt, rs, vartype, pred) VALUES(%s, %s, %s, %s, %s, %s, %s)")
     for i in an:
-        aninsert = ("INSERT INTO an VALUES(i.id, i.loc, i.ref, i.alt, i.gene, i.gt, i.rs, i.vartype, i.anpred)")
-        curs.execute(aninsert, )
+        i.check_loc(i.loc)
+        i.format_gt(i.gt)
+        i.format_anvartype(i.anvartype)
+        i.format_anpred(i.anpred)
+        curs.execute(aninsert, (i.id, i.loc, i.gene, i.gt, i.rs, i.anvartype, i.anpred,))
 
-    snptable = ("CREATE TABLE snp(rs varchar(100) not null primary key, change varchar(100) null)")
-    curs.execute(snptable, )
+    clintable = ("CREATE TABLE clin(id int not null primary key, loc varchar(250) not null, vartype varchar(250) null, sig varchar(100) null, dn varchar(250) null)")
+    curs.execute(clintable, )
 
-    for i in snp:
-        snpinsert = ("INSERT INTO snp VALUES(i.rs, i.change)")
-        curs.execute(snpinsert, )
-
-    conn.commit()
-    curs.close()
-    conn.close()
-
-def queries(usergene, usergt, userrs, uservartype, usersepred, useranpred):
-    
-    conn = mysql.connector.connect(user="chall84", password="Diapers3", host="localhost", database="chall84_f")
-    curs = conn.cursor()
-
-    rowlist = []
-    qry = ("SELECT se.loc, se.ref, se.alt, se.gene, se.gt, an.rs, se.vartype, se.sepred, an.anpred FROM se JOIN an on se.id = an.id WHERE se.gene=%s AND se.gt=%s, AND an.rs=%s, AND se.vartype=%s AND se.sepred=%s AND an.anpred=%s")
-    curs.execute(qry, usergene, usergt, userrs, uservartype, usersepred, useranpred, )
-
-    for (loc, ref, alt, gene, gt, vartype, rs, anpred, sepred) in curs:
-        row = fobjects.variant(loc=loc, gene=gene, ref=ref, alt=alt, gt=gt, vartype=vartype, rs=rs, anpred=anpred, sepred=sepred)
-        rowlist.append(row)
-    return rowlist
+    clininsert = ("INSERT INTO clin (id, loc, vartype, sig, dn) VALUES(%s, %s, %s, %s, %s)")
+    for i in clin:
+        i.check_loc(i.loc)
+        i.format_dn(i.dn)
+        i.format_clinvartype(i.clinvartype)
+        curs.execute(clininsert, (i.id, i.loc, i.clinvartype, i.sig, i.dn,))
 
     conn.commit()
     curs.close()
@@ -58,5 +53,5 @@ def queries(usergene, usergt, userrs, uservartype, usersepred, useranpred):
 
 
 
-create_db("22snpeff.vcf", "22annovar.vcf", "snp_result.txt")
+#create_db("22snpeff.vcf", "22annovar.vcf", "22clinvar.vcf")
 

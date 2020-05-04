@@ -1,0 +1,41 @@
+body {
+    font: small 'Lucida Grande', Verdana, Arial, sans-serif;
+}
+
+h2 {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.ui-autocomplete {
+    background-color: #fff;
+}
+
+
+/* the results section should be initially invisible */
+section#results {
+    display: none;
+}
+
+table {
+    border-collapse: collapse;
+    margin-bottom: 50px;
+    table-layout: fixed;
+    overflow-y:auto;
+}
+
+table thead td {
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+}
+
+table td {
+    border: 1px solid rgb(200,200,200);
+    padding: 2px 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
