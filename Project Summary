@@ -1,0 +1,45 @@
+Chall84 Final Project Summary
+
+Background and prospective usage:
+
+Because I am enrolled in the Individualized Genomics and Health program and have a keen interest in the analysis of human genomic variants I had my genome sequenced with Dante Labs so that I could have some data to play with. I’ve been trying to turn the raw data into something useful since. 
+
+While I’m sure such a tool exists, I have yet to find an easy way to compare my genome to ClinVar without a heavy amount of curation (and a bit of cash). Also, in trying out variant consequence predictors I found that many of the variants expected to be deleterious were actually listed as benign in ClinVar, or had completely different predictions with other software. Also, many of the displays omitted the variant genotype from the results, which is pretty important. 
+
+This project stemmed from my desire to see predictions and clinical data for my variants at the same time. It doesn’t really offer anything that’s not already available, but it offers it in a way that I control and can change. I’d really like to get into the field of rare disease diagnosis so this project could possibly be useful for my future career. Also, I have a mild, rare brain disease that doesn’t have a known molecular cause, so it would be really cool to narrow that down.
+
+If there aren’t any bugs in my parsing strategies, any human VCF should work as input and this kind of display could streamline the way someone could detect and evaluate significant variants. Most predictors just predict without taking clinical and known data into account. Also, different predictors have different strengths and weaknesses and combining them leverages that. For example, the SnpEff predictions are pretty much entirely based on the type and location of the mutation and only predict deleterious mutations, classifying everything that’s not deleterious as a “modifier”.  MutationTaster (which is the prediction I used from ANNOVAR), on the other hand, classifies variants as “disase causing” (deleterious) or “polymorphism” (benign). It also takes clinical data into account and I was interested to see how it compared to the ClinVar file.
+
+Implemetation:
+
+Originally I was going to include gene ontology but I noticed that the ClinVar file had clinical diagnosis information for each variant, so I decided to use that instead. Because ANNOVAR already put in the RS for each variant I could also get rid of the dbSNP part of my schema and just replace it with ClinVar, which saved on space and allowed for more specificity. I was going to have all of the non-pathogenic variants classified as benign but now the variants are classified correctly as in ClinVar.
+
+It took me a while to realize that I needed to do a left outer join on the ClinVar table so that results from the other files would be shown even if there are no results in the ClinVar table. Also, some of my searches were timing out. I assumed that it was because of the size of the tables but it turned out to be an inefficiency in my join statements (shouldn’t have done it the lazy way). The size of the databse must matter, though, because the searches consistently timed-out when I uploaded my whole genome results into the database... (probably shouldn’t have done that).
+
+Two of my display problems were solved by making the background of the element white (autocomplete and the table header). They were clear before and it made it hard to read. Also, I made the RS search a seperate form so that the autocomplete from the other searches stopped showing up. The RS search doesn’t need autocomplete because if you’re searching by ID number you generally know exactly what you’re looking for. I tried to make the prediction searches a drop down list but it turned out to be easier to do that by simply making the autocomplete minLength 0.
+
+Discussion of results:
+
+While the point of this tool isn’t to evaluate the predictors against the clinical data or each other, I did notice a few things. Firstly, there are generally more SnpEff predictions than MutationTaster predictions (excluding modifier predictions which are basically nothing). I think because SnpEff focuses on the location and type of variant it flags some variants unnecessarily. It’s more of a quick pass over the variant consequences while MutationTaster is more focused on disease phenotypes and therefore is much more conservative in its predictions. For the example data there are only 11 disease causing mutations predicted by MutationTaster. Obviously MutationTaster’s more complex algorithm (it employs a Bayes classifier) is the reason for the discrepancy. 
+
+Automatic disease causing and automatic polymorphism are based on clinical data, including data that’s not represented in ClinVar from dbSNP, TGP, and HGMD - about 150 automatic polymorphism predictions weren’t represented in ClinVar. There are allele frequency requirements, however, which causes MutationTaster to miss out on classifying some variants - about the same amount of ClinVar benign variants were not classified as an automatic polymorphism.
+
+Combing these data sources significantly increases their power, in my opinion. ClinVar provides a good amount of reliable clinical data while MutationTaster incorporates some other important clinical data and makes predictions on disease potential. SnpEff’s less conservative approach allows the user to find variants (especially variants with low population frequency) that need more investigating, for example, variants that have high or moderate SnpEff predictions and no data from other sources. 
+
+Ideas for the future:
+
+Also, there are still some inefficiencies  - searches with a large amount of results still time out or have a significant delay. It would be really nice to have the whole genome up there at the same time. I’m gonna try it with a database on my own machine to see if that helps.
+
+Adding gene ontology would be nice and other predictors. In order to do that I would have to make it so you could hide columns because it would get overwhelming fast.
+
+I would have liked to filter searches by multiple factors (ie. Pathogenic and Moderate or High SnpEff prediction) but it was starting to get away from me.
+
+I would like to implement the upload feature and run the predictors automatically but the permissions for ANNOVAR are tricky (you’re not allowed to redistribute it).
+
+It would be nice to have a more automated analysis. As I get some experience and start to learn what makes a variant really important I could use that to flag important variants automatically. I wouldn’t want it to become too automatic, though, because there are always unexpected things in biology. I would still want to have a way to view the raw results easily.
+
+It would be nice to have a venn diagram of the results (ie. How many have a high SnpEff prediction and an automatic disease causing MutationTaster prediction) where you could click on each of the overlaps to perform an automatic search.
+
+I would love to offer this as an open-source tool but I don’t have the resources to do that. 
+
+
