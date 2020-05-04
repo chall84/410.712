@@ -48,7 +48,7 @@ function rs_search( term ) {
     $('tbody').empty();
     
     // transforms all the form parameters into a string we can send to the server
-    var frmStr = $('#search_term').serialize();
+    var frmStr = $('#rs_term').serialize();
     
     $.ajax({
         url: './rs_search.cgi',

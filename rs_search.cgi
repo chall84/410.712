@@ -8,7 +8,7 @@ import fparse
 
 print("Content-Type: application/json\n\n")
 form = cgi.FieldStorage()
-term = form.getvalue('search_term')
+term = form.getvalue('rs_term')
 
 
 conn = mysql.connector.connect(user="chall84", password="Diapers3", host="localhost", database="chall84")
