@@ -26,13 +26,17 @@ Automatic disease causing and automatic polymorphism are based on clinical data,
 
 Combing these data sources significantly increases their power, in my opinion. ClinVar provides a good amount of reliable clinical data while MutationTaster incorporates some other important clinical data and makes predictions on disease potential. SnpEff’s less conservative approach allows the user to find variants (especially variants with low population frequency) that need more investigating, for example, variants that have high or moderate SnpEff predictions and no data from other sources. 
 
+My 22nd chromosome is a little boring, to be honest. There are no pathogenic snps from ClinVar. Of the 28 high predictions from SnpEff, 8 are known to be bengin through ClinVar or MutationTaster. There is one automatic disease casuing and 8 disease causing variants from MutationTaster that aren’t known to be benign. I’m currently  going through and evaluating these variants but I haven’t found anything particularly interesting. So far all of the potentially broken genes have a working homolog.
+
 Ideas for the future:
 
 Also, there are still some inefficiencies  - searches with a large amount of results still time out or have a significant delay. It would be really nice to have the whole genome up there at the same time. I’m gonna try it with a database on my own machine to see if that helps.
 
-Adding gene ontology would be nice and other predictors. In order to do that I would have to make it so you could hide columns because it would get overwhelming fast.
+I would like to add a list of phenotypes associated with the gene from OMIM because that’s been my first stop when evaluating variants. Adding gene ontology would be nice, too and other predictors. In order to do that I would have to make it so you could hide columns because it would get overwhelming fast.
 
 I would have liked to filter searches by multiple factors (ie. Pathogenic and Moderate or High SnpEff prediction) but it was starting to get away from me.
+
+My strategy of parsing out the SnpEff prediction for the first transcript is producing some noise (missense variants when ANNOVAR says it should be intergenic) so I need to make the SnpEff predictions more transcript specific. It’s tricky, though, because I don’t know how I would go about prioritizing transcripts. 
 
 I would like to implement the upload feature and run the predictors automatically but the permissions for ANNOVAR are tricky (you’re not allowed to redistribute it).
 
