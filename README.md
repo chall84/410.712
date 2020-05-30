@@ -1,4 +1,7 @@
 # 410.712
+
+This is a project I completed for school
+
 Multianalysis VCF Viewer allows the user to view SnpEff, ANNOVAR and ClinVar annotations at the same time, easily comparing the predictions and clinical data for each variant in a genome. To view the example data (which is the snp variants on my chromosome 22) skip to Step 3.
 
 Requirements: Connection to the bfx3 server is required to connect to the mysql database. Each of the files used to build the database should be no more than 1GB. 
