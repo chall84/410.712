@@ -6,7 +6,7 @@ import fparse
 
 def create_db(sefile, anfile, clinfile):
 
-    conn = mysql.connector.connect(user="chall84", password="Diapers3", host="localhost", database="chall84")
+    conn = mysql.connector.connect(user="chall84", password="*", host="localhost", database="chall84")
     curs = conn.cursor()
 
     drop = ("DROP TABLE IF EXISTS se, an, clin")
